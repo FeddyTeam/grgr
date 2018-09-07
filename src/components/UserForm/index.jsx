@@ -22,7 +22,7 @@ class Login extends Component {
     }
 
     render() {
-        window.__form = loginForm
+        const $email = loginForm.$('email')
         const $username = loginForm.$('username')
         const $password = loginForm.$('password')
         const { loading } = this.props.authStore
@@ -30,14 +30,17 @@ class Login extends Component {
         return (
             <div>
                 <Form onSubmit={this.onSubmit.bind(this)}>
-                    <FormItem label={$username.label}>
-                        <Input {...$username.bind()} autoComplete='email'/>
-                    </FormItem>
-                    <FormItem label={$password.label}>
-                        <Input {...$password.bind()} autoComplete='current-password'/>
+                    <FormItem>
+                        <Input {...$email.bind()} />
                     </FormItem>
                     <FormItem>
-                        <Button type="primary" loading={loading} htmlType="submit">LOGIN</Button>
+                        <Input {...$username.bind()} />
+                    </FormItem>
+                    <FormItem>
+                        <Input {...$password.bind()} />
+                    </FormItem>
+                    <FormItem>
+                        <Button type="primary" loading={loading} htmlType="submit">CREATE</Button>
                     </FormItem>
                 </Form>
             </div>
