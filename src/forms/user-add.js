@@ -2,10 +2,6 @@ import validatorjs from 'validatorjs'
 import MobxReactForm from 'mobx-react-form'
 
 const fields = [{
-    name: 'id',
-    label: 'ID',
-    type: 'id'
-}, {
     name: 'email',
     label: 'EMAIL',
     type: 'email',
@@ -13,25 +9,13 @@ const fields = [{
 }, {
     name: 'username',
     label: 'USERNAME',
-    type: 'username',
+    type: 'text',
     rules: 'required|string|between:6,24'
 }, {
-    name: 'name',
-    label: 'NAME',
-    type: 'name',
+    name: 'password',
+    label: 'PASSWORD',
+    type: 'text',
     rules: 'required|string|between:6,24'
-}, {
-    name: 'status',
-    label: 'STATUS'
-}, {
-    name: 'adm',
-    label: 'ADMIN?'
-}, {
-    name: 'cms',
-    label: 'EDITOR?'
-}, {
-    name: 'abc',
-    label: 'BASIC?'
 }]
 
 const plugins = { dvr: validatorjs }

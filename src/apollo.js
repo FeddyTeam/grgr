@@ -3,12 +3,12 @@ import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-import { LOGIN } from './graphql/auth'
+import { LOGIN, UPDATE_PASSWORD, FETCH_PROFILE } from './graphql/auth'
 import { FETCH_NEWS, CREATE_NEWS, UPDATE_NEWS, DELETE_NEWS, PERMANENTLY_DELETE_NEWS } from './graphql/news'
 import { CREATE_USER, UPDATE_USER, FETCH_USERS, FETCH_USER } from './graphql/user'
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:3000/graphql',
+    uri: '/graphql'
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -23,7 +23,6 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const client = new ApolloClient({
-    // uri: 'http://localhost:3001/graphql'
     link: authLink.concat(httpLink),
     cache: new InMemoryCache()
 })
@@ -37,8 +36,18 @@ export const auth = {
             }
         })
     },
-    logout() {
-
+    updatePassword({ password, newPassword }) {
+        return client.mutate({
+            mutation: UPDATE_PASSWORD,
+            variables: {
+                passwords: { password, newPassword }
+            }
+        })
+    },
+    fetchProfile() {
+        return client.query({
+            query: FETCH_PROFILE
+        })
     }
 }
 

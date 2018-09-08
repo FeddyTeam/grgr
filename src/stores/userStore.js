@@ -1,4 +1,4 @@
-import { action, observable, runInAction, autorun } from 'mobx'
+import { action, observable, runInAction } from 'mobx'
 import apollo from '../apollo'
 
 import setupLoading from './mixins/setupLoading'
@@ -30,11 +30,11 @@ class UserStore {
         }
     }
 
-    @action.bound async updateUser (userForm) {
+    @action.bound async updateUser (userInput) {
         try {
             this.startProgress()
 
-            const results = await apollo.user.updateUser(userForm.values())
+            const results = await apollo.user.updateUser(userInput)
             const { data: { user } } = results
 
             const idx = this.users.findIndex(({ id }) => id === user.id)
@@ -51,10 +51,10 @@ class UserStore {
     }
 
 
-    @action.bound async createUser (user) {
+    @action.bound async createUser (userInput) {
         try {
             this.startProgress()
-            const results = await apollo.user.createUser(user)
+            const results = await apollo.user.createUser(userInput)
             const { data: { user } } = results
 
             runInAction(() => {
@@ -68,12 +68,4 @@ class UserStore {
     }
 }
 
-const userStore = new UserStore()
-
-autorun(() => {
-    console.log(userStore.users.length)
-    console.log(userStore.modalVisible)
-    // console.log(userStore.loading)
-})
-
-export default userStore
+export default new UserStore()

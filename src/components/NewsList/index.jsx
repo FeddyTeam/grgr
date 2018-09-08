@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { Table, Row, Col, Select, Form } from 'antd'
 
 const { Option } = Select
 const FormItem = Form.Item
 
+@withRouter
 @inject('newsStore')
 @observer
 class NewsList extends Component {
@@ -18,7 +19,7 @@ class NewsList extends Component {
                 title: 'Thumbnail',
                 dataIndex: 'thumbnail',
                 key: 'thumbnail',
-                render: thumbnail => <img src={thumbnail} height="48"/>
+                render: thumbnail => <img src={thumbnail} alt='Thumbnail' height="48"/>
             }, {
                 title: 'Title',
                 dataIndex: 'title',

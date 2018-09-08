@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import { omit, isEmpty } from 'lodash'
+
 import { Form, Input, Button, Select, Row, Col, message } from 'antd'
 import newsForm from '../../forms/news'
 
@@ -16,13 +18,13 @@ class CMS extends Component {
         try {
             // means: editing
             if (this.props.newsStore.currentId) {
-                await this.props.newsStore.updateNews(newsForm)
+                await this.props.newsStore.updateNews(newsForm.values())
             } else {
-                await this.props.newsStore.createNews(newsForm)
-                this.props.history.replace('/cms')
+                const { id } = await this.props.newsStore.createNews(omit(newsForm.values(), 'id'))
+                this.props.history.replace(`/cms/edit/${id}`)
             }
 
-            message.success('SUCCESS')
+            message.success('SUCCESS: 已经自动重定向，可以继续编辑和保存')
         } catch (err) {
             message.error(`Somthing Wrong? - ${err}`)
         }
@@ -34,20 +36,26 @@ class CMS extends Component {
             // TODO: fetch news from server
             this.props.newsStore.setCurrentId(id)
             const news = this.props.newsStore.currentNews
+
+            if (isEmpty(news)) {
+                message.error('ERROR: Hmm，你发现了华点，我忘记添加编辑前从线上拉数据的功能，我的意思是，编辑状态不要刷新')
+                this.props.history.replace('/cms')
+                return
+            }
+
             newsForm.update(news) // contains a id
         } else {
-            // TODO: Delete this
-
+            // TODO: Delete this fake data
             newsForm.update({
-                title: 'Hello World',
-                altTitle: 'Test Item',
-                content: '测试测试',
+                title: 'undefined (伪)',
+                altTitle: '',
+                content: '这是一条默认内容，图片预设为 Sakura，链接预设为 Google，主题色预设为 #ffffff，状态预设为 draft，发布前请修改',
 
                 image: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV',
                 altImage: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView/0/w/640',
                 thumbnail: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView/2/w/256',
 
-                status: 'actived',
+                status: 'draft',
                 type: 'news',
                 level: 'normal',
 
@@ -55,6 +63,7 @@ class CMS extends Component {
 
                 color: '#ffffff',
 
+                id: null,
                 userId: 'fake-user-id'
             })
         }
@@ -66,7 +75,7 @@ class CMS extends Component {
         return (
             <div>
                 <Form onSubmit={this.onSubmit.bind(this)}>
-                    <Row>
+                    <Row gutter={10}>
                         <Col span={8}>
                             <FormItem label={newsForm.$('type').label}>
                                 <Select  {...newsForm.$('type').bind()}>

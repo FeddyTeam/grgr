@@ -12,9 +12,8 @@ class Login extends Component {
     async onSubmit(e) {
         e.preventDefault()
         try {
-            await this.props.authStore.login(loginForm)
+            await this.props.authStore.login(loginForm.values())
             this.props.history.replace('/')
-
             message.success('WELCOME BACK')
         } catch (err) {
             message.error(`Somthing Wrong? - ${err}`)
@@ -22,7 +21,6 @@ class Login extends Component {
     }
 
     render() {
-        window.__form = loginForm
         const $username = loginForm.$('username')
         const $password = loginForm.$('password')
         const { loading } = this.props.authStore

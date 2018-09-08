@@ -49,6 +49,10 @@ const fields = [{
     name: 'userId',
     label: 'User ID',
     type: 'text'
+}, {
+    name: 'id',
+    label: 'ID',
+    type: 'text'
 }]
 
 const plugins = { dvr: validatorjs }

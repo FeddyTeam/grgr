@@ -2,11 +2,22 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { pick } from 'lodash'
 
-import { Table, Tag, Switch, Button, Form, Input, Modal, Select, Checkbox, message } from 'antd'
+import { Table, Tag, Switch, Button, Form, Input, Modal, Select, Row, Col, message } from 'antd'
 import userForm from '../../forms/user'
 
 const FormItem = Form.Item
 const Option = Select.Option
+
+const statusTag = status => {
+    const colors = {
+        pending: 'green',
+        actived: 'blue',
+        deleted: 'orange',
+        locked: 'purple'
+    }
+
+    return <Tag color={colors[status]}>{status}</Tag>
+}
 
 @inject('userStore')
 @observer
@@ -22,7 +33,7 @@ class UserList extends Component {
                 title: 'Avatar',
                 dataIndex: 'avatar',
                 key: 'avatar',
-                render: avatar => <img src={avatar} height="32"/>
+                render: avatar => <img src={avatar} alt='Avatar' height="32"/>
             }, {
                 title: 'Name',
                 dataIndex: 'name',
@@ -35,6 +46,11 @@ class UserList extends Component {
                 title: 'Email',
                 dataIndex: 'email',
                 key: 'email'
+            }, {
+                title: 'Status',
+                dataIndex: 'status',
+                key: 'status',
+                render: statusTag
             }, {
                 title: 'Admin?',
                 dataIndex: 'adm',
@@ -61,7 +77,7 @@ class UserList extends Component {
 
     async editUser(user) {
         this.props.userStore.openModal()
-        userForm.init({
+        userForm.update({
             ...pick(user, [
                 'id', 'username', 'email', 'cms', 'adm', 'abc', 'status', 'name'
             ])
@@ -75,7 +91,7 @@ class UserList extends Component {
     async onSubmit(event) {
         event.preventDefault()
         try {
-            await this.props.userStore.updateUser(userForm)
+            await this.props.userStore.updateUser(userForm.values())
 
             message.success('SUCCESS')
             this.props.userStore.closeModal()
@@ -85,7 +101,6 @@ class UserList extends Component {
     }
 
     render() {
-        window.__userForm = userForm
         const $username = userForm.$('username')
         const $email = userForm.$('email')
         const $name = userForm.$('name')
@@ -122,15 +137,24 @@ class UserList extends Component {
                                 <Option value='locked'>locked</Option>
                             </Select>
                         </FormItem>
-                        <FormItem label={$adm.label}>
-                            <Switch checked={$adm.value} onChange={$adm.onChange}/>
-                        </FormItem>
-                        <FormItem label={$cms.label}>
-                            <Switch checked={$cms.value} onChange={$cms.onChange}/>
-                        </FormItem>
-                        <FormItem label={$abc.label}>
-                            <Switch checked={$abc.value} onChange={$abc.onChange}/>
-                        </FormItem>
+                        <Row gutter={10}>
+                            <Col span={8}>
+                                <FormItem label={$adm.label}>
+                                    <Switch checked={$adm.value} onChange={$adm.onChange}/>
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem label={$cms.label}>
+                                    <Switch checked={$cms.value} onChange={$cms.onChange}/>
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem label={$abc.label}>
+                                    <Switch checked={$abc.value} onChange={$abc.onChange}/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+
                         <FormItem>
                             <Button type="primary" loading={loading} htmlType="submit">SAVE</Button>
                         </FormItem>

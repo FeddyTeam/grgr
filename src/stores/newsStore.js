@@ -53,13 +53,14 @@ class AuthStore {
         }
     }
 
-    @action.bound async createNews(newsForm) {
+    @action.bound async createNews(newsInput) {
         try {
             this.startProgress()
-            const results = await apollo.news.createNews(newsForm.values())
+            const results = await apollo.news.createNews(newsInput)
             const { data: { createdNews } } = results
 
             this.storage.set(createdNews.id, createdNews)
+            return createdNews
         } catch (err) {
             throw err.message
         } finally {
@@ -67,13 +68,14 @@ class AuthStore {
         }
     }
 
-    @action.bound async updateNews(newsForm) {
+    @action.bound async updateNews(newsInput) {
         try {
             this.startProgress()
-            const results = await apollo.news.updateNews(newsForm.values())
+            const results = await apollo.news.updateNews(newsInput)
             const { data: { updatedNews } } = results
 
             this.storage.set(updatedNews.id, updatedNews)
+            return updatedNews
         } catch (err) {
             throw err.message
         } finally {
@@ -93,7 +95,7 @@ class AuthStore {
     }
 
     @computed get currentNews() {
-        return toJS(this.storage.get(this.currentId)) || {}
+        return toJS(this.storage.get(this.currentId))
     }
 }
 
