@@ -10,7 +10,7 @@ import { Provider } from 'mobx-react'
 
 ReactDOM.render(
     <Provider {...stores}>
-        <BrowserRouter>
+        <BrowserRouter basename='/dashboard'>
             <App/>
         </BrowserRouter>
     </Provider>, document.getElementById('root'))

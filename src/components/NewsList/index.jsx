@@ -1,10 +1,33 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
-import { Table, Row, Col, Select, Form } from 'antd'
+import { Table, Row, Col, Select, Form, Tag } from 'antd'
 
 const { Option } = Select
 const FormItem = Form.Item
+
+const levelTag = level => {
+    const levelColors = {
+        normal: 'blue',
+        featured: 'orange',
+        mustread: 'magenta',
+        removed: '#ddd'
+    }
+
+    return <Tag color={levelColors[level]}>{level}</Tag>
+}
+
+const statusTag = status => {
+    const statusColors = {
+        draft: 'green',
+        pending: 'cyan',
+        actived: 'blue',
+        expired: '#ddd',
+        deleted: '#ddd'
+    }
+
+    return <Tag color={statusColors[status]}>{status}</Tag>
+}
 
 @withRouter
 @inject('newsStore')
@@ -31,7 +54,22 @@ class NewsList extends Component {
             }, {
                 title: 'Content / Description',
                 dataIndex: 'content',
-                key: 'content'
+                key: 'content',
+                render: content => <div title={content}
+                    style={{ maxWidth: '300px',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis'}}>{content}</div>
+            }, {
+                title: 'Status',
+                dataIndex: 'status',
+                key: 'status',
+                render: statusTag
+            }, {
+                title: 'Level',
+                dataIndex: 'level',
+                key: 'level',
+                render: levelTag
             }, {
                 title: 'By',
                 dataIndex: 'user',
