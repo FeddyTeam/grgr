@@ -26,8 +26,6 @@ class AppContent extends React.Component {
                 {keys.lgd && <Route path="/profile" component={Profile}/>}
                 {keys.lgd && <Route path="/passwords" component={Passwords}/>}
                 {keys.lgd && <Route path="/exit" component={Exit}/>}
-
-                <Route path='/avatar-uploader' component={AvatarUploader}/>
             </Content>
         )
     }

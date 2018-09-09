@@ -6,7 +6,7 @@ import qiniu from '../../lib/qiniu'
 import './style.css'
 
 @inject('authStore')
-class AvatarUploader extends Component {
+class PhotoUploader extends Component {
     constructor(props) {
         super(props)
 
@@ -62,9 +62,10 @@ class AvatarUploader extends Component {
         const uploader = qiniu({
             jwtToken: this.props.authStore.token,
             multiple: true,
-            imageView: '?imageView2/1/w/256',
+            imageView: this.props.imageView || '',
             onStart: tasks => {
-                this.start({ name: tasks[0].file.name })
+                this.start({ name: tasks[0].file.name, loading: true })
+                onChange('')
             },
             onTaskSuccess: result => {
                 this.success(result)
@@ -90,7 +91,7 @@ class AvatarUploader extends Component {
         const { loading } = this.state
 
         return (
-            <div className='avatar-uploader' onClick={this.uploadImage.bind(this)}>
+            <div className='photo-uploader' onClick={this.uploadImage.bind(this)}>
                 {this.props.value?
                     <img src={this.props.value} alt='Avatar'/> :
                     <div>
@@ -103,4 +104,4 @@ class AvatarUploader extends Component {
     }
 }
 
-export default AvatarUploader
+export default PhotoUploader

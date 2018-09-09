@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { omit, isEmpty } from 'lodash'
 
+import { AvatarUploader, PhotoUploader } from '..'
 import { Form, Input, Button, Select, Row, Col, message } from 'antd'
 import newsForm from '../../forms/news'
 
@@ -51,9 +52,9 @@ class CMS extends Component {
                 altTitle: '',
                 content: '这是一条默认内容，图片预设为 Sakura，链接预设为 Google，主题色预设为 #ffffff，状态预设为 draft，发布前请修改',
 
-                image: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV',
-                altImage: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView/0/w/640',
-                thumbnail: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView/2/w/256',
+                image: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView2/0/w/1200/q/50',
+                altImage: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView2/1/w/640/h/480',
+                thumbnail: 'https://static.feddy.org/FtnqM8NupRtfw_2-BUArl_nl_GiV?imageView2/1/w/256',
 
                 status: 'draft',
                 type: 'news',
@@ -61,7 +62,7 @@ class CMS extends Component {
 
                 link: 'https://google.com',
 
-                color: '#ffffff',
+                color: '#FEDFE1',
 
                 id: null,
                 userId: 'fake-user-id'
@@ -109,15 +110,30 @@ class CMS extends Component {
                         <TextArea {...newsForm.$('content').bind()} autoComplete='off'/>
                     </FormItem>
 
-                    <FormItem label={newsForm.$('image').label}>
-                        <Input {...newsForm.$('image').bind()} autoComplete='off'/>
-                    </FormItem>
-                    <FormItem label={newsForm.$('altImage').label}>
-                        <Input {...newsForm.$('altImage').bind()} autoComplete='off'/>
-                    </FormItem>
-                    <FormItem label={newsForm.$('thumbnail').label}>
-                        <Input {...newsForm.$('thumbnail').bind()} autoComplete='off'/>
-                    </FormItem>
+                    <Row gutter={10}>
+                        <Col span={12}>
+                            <FormItem label={newsForm.$('image').label}>
+                                <PhotoUploader imageView='?imageView2/0/w/1200/q/50' {...newsForm.$('image').bind()}/>
+                                <Input style={{ maxWidth: '640px' }} {...newsForm.$('image').bind()} autoComplete='off'/>
+                                <div>
+                                    <Button icon="link" target="_blank" href="https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2">七牛图片基本处理</Button>
+                                    <Button icon="github" target="_blank" href="https://github.com/FeddyTeam/grgr/issues/1">讨论下图片尺寸</Button>
+                                </div>
+                            </FormItem>
+                        </Col>
+                        <Col span={8}>
+                            <FormItem label={newsForm.$('altImage').label}>
+                                <PhotoUploader imageView='?imageView2/1/w/640/h/480' {...newsForm.$('altImage').bind()}/>
+                                <Input {...newsForm.$('altImage').bind()} autoComplete='off'/>
+                            </FormItem>
+                        </Col>
+                        <Col span={4}>
+                            <FormItem label={newsForm.$('thumbnail').label}>
+                                <PhotoUploader imageView='?imageView2/1/w/256' {...newsForm.$('thumbnail').bind()}/>
+                                <Input {...newsForm.$('thumbnail').bind()} autoComplete='off'/>
+                            </FormItem>
+                        </Col>
+                    </Row>
 
                     <FormItem label={newsForm.$('link').label}>
                         <Input {...newsForm.$('link').bind()} autoComplete='off'/>

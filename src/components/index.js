@@ -12,3 +12,4 @@ export { default as AppContent } from './AppContent'
 export { default as AppFooter } from './AppFooter'
 
 export { default as AvatarUploader } from './AvatarUploader'
+export { default as PhotoUploader } from './PhotoUploader'
