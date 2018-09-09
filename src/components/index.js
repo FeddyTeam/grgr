@@ -10,3 +10,5 @@ export { default as Exit } from './Exit'
 export { default as AppHeader } from './AppHeader'
 export { default as AppContent } from './AppContent'
 export { default as AppFooter } from './AppFooter'
+
+export { default as AvatarUploader } from './AvatarUploader'

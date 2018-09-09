@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { pick } from 'lodash'
 
 import { Table, Tag, Switch, Button, Form, Input, Modal, Select, Row, Col, message } from 'antd'
+import { AvatarUploader } from '..'
 import userForm from '../../forms/user'
 
 const FormItem = Form.Item
@@ -79,7 +80,7 @@ class UserList extends Component {
         this.props.userStore.openModal()
         userForm.update({
             ...pick(user, [
-                'id', 'username', 'email', 'cms', 'adm', 'abc', 'status', 'name'
+                'id', 'username', 'email', 'cms', 'adm', 'abc', 'status', 'name', 'avatar'
             ])
         })
     }
@@ -95,12 +96,14 @@ class UserList extends Component {
 
             message.success('SUCCESS')
             this.props.userStore.closeModal()
+            userForm.clear()
         } catch (err) {
             message.error(`Somthing Wrong? - ${err}`)
         }
     }
 
     render() {
+        const $avatar = userForm.$('avatar')
         const $username = userForm.$('username')
         const $email = userForm.$('email')
         const $name = userForm.$('name')
@@ -120,6 +123,9 @@ class UserList extends Component {
                     onCancel={this.props.userStore.closeModal}
                 >
                     <Form onSubmit={this.onSubmit.bind(this)}>
+                        <FormItem label={$avatar.label}>
+                            <AvatarUploader {...$avatar.bind()}/>
+                        </FormItem>
                         <FormItem label={$email.label}>
                             <Input {...$email.bind()} autoComplete='email'/>
                         </FormItem>
@@ -166,6 +172,16 @@ class UserList extends Component {
 
     componentWillMount() {
         this.props.userStore.fetchUsers().then()
+        // TODO: apollo-client has cache, so...
+        /**
+         * detail:
+         *
+         * - apollo-client has cache for same query
+         * - this method would be called every time
+         * - user create is in another component
+         *
+         * as a result user created -> users store updated -> fetch users automantically -> users updated again, with old values
+         */
     }
 }
 
