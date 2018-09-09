@@ -1,4 +1,4 @@
-import { action, observable, runInAction } from 'mobx'
+import { action, observable } from 'mobx'
 import apollo from '../apollo'
 
 import setupLoading from './mixins/setupLoading'
@@ -6,7 +6,6 @@ import setupLoading from './mixins/setupLoading'
 @setupLoading
 class UserStore {
     @observable users = []
-    @observable user = {}
 
     @observable modalVisible = false
     @action.bound openModal() {
@@ -57,9 +56,7 @@ class UserStore {
             const results = await apollo.user.createUser(userInput)
             const { data: { user } } = results
 
-            runInAction(() => {
-                this.user = user
-            })
+            this.users.push(user)
         } catch (err) {
             throw err.message
         } finally {

@@ -44,7 +44,7 @@ const fields = [{
 }, {
     name: 'color',
     label: 'THEME COLOR',
-    type: 'text',
+    type: 'color',
 }, {
     name: 'userId',
     label: 'User ID',

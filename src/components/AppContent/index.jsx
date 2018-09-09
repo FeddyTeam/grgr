@@ -2,7 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { Layout } from 'antd'
-import { Login, Hello, CMS, Manage, Profile, Passwords, Exit } from '..'
+import { Login, Hello, CMS, Manage, Profile, Passwords, Exit, AvatarUploader } from '..'
 
 const { Content } = Layout
 

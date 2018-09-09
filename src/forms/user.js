@@ -32,6 +32,10 @@ const fields = [{
 }, {
     name: 'abc',
     label: 'BASIC?'
+}, {
+    name: 'avatar',
+    label: 'AVATAR',
+    type: 'text'
 }]
 
 const plugins = { dvr: validatorjs }
