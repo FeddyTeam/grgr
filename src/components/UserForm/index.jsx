@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { Form, Input, Button, message } from 'antd'
 import userForm from '../../forms/user-add'
+import bindField from '../../lib/formFieldBindings'
 
 const FormItem = Form.Item
 
@@ -15,12 +16,12 @@ class UserCreator extends Component {
 
     async onSubmit(e) {
         e.preventDefault()
+        if (userForm.hasError) return
         try {
             await this.props.userStore.createUser(userForm.values())
             this.props.history.replace('/manage/users/all')
 
             message.success('SUCCESS')
-            message.warning('确实成功了，不过因为 Apollo-client 的缓存机制，列表没更新。已安排', 5000)
             userForm.clear()
         } catch (err) {
             message.error(`Somthing Wrong? - ${err}`)
@@ -35,14 +36,14 @@ class UserCreator extends Component {
 
         return (
             <div>
-                <Form onSubmit={this.onSubmit.bind(this)} autoComplete='off'>
-                    <FormItem label={$email.label}>
+                <Form onSubmit={this.onSubmit.bind(this)}>
+                    <FormItem {...bindField($email)}>
                         <Input {...$email.bind()} autoComplete='off'/>
                     </FormItem>
-                    <FormItem label={$username.label}>
+                    <FormItem {...bindField($username)}>
                         <Input {...$username.bind()} autoComplete='off'/>
                     </FormItem>
-                    <FormItem label={$password.label}>
+                    <FormItem {...bindField($password)}>
                         <Input {...$password.bind()} autoComplete='off'/>
                     </FormItem>
                     <FormItem>

@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { Form, Input, Button, message } from 'antd'
 import loginForm from '../../forms/login'
+import bindField from '../../lib/formFieldBindings'
 
 const FormItem = Form.Item
+window.__form = loginForm
 
 @inject('authStore')
 @observer
@@ -11,6 +13,7 @@ class Login extends Component {
 
     async onSubmit(e) {
         e.preventDefault()
+        if (loginForm.hasError) return
         try {
             await this.props.authStore.login(loginForm.values())
             this.props.history.replace('/')
@@ -28,10 +31,10 @@ class Login extends Component {
         return (
             <div>
                 <Form onSubmit={this.onSubmit.bind(this)}>
-                    <FormItem label={$username.label}>
+                    <FormItem {...bindField($username)}>
                         <Input {...$username.bind()} autoComplete='email'/>
                     </FormItem>
-                    <FormItem label={$password.label}>
+                    <FormItem {...bindField($password)}>
                         <Input {...$password.bind()} autoComplete='current-password'/>
                     </FormItem>
                     <FormItem>

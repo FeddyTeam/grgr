@@ -36,3 +36,20 @@ export const FETCH_PROFILE = gql`query {
         url
     }
 }`
+
+export const UPDATE_PROFILE = gql`mutation ($profile: ProfileInput!) {
+    profile: updateProfile(profile: $profile) {
+        id,
+        createdAt,
+        updatedAt,
+
+        status,
+        username,
+        name,
+        email,
+        bio,
+        avatar,
+        birthday,
+        url
+    }
+}`

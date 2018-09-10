@@ -1,7 +1,6 @@
 import validatorjs from 'validatorjs'
 import MobxReactForm from 'mobx-react-form'
 
-
 const fields = [{
     name: 'username',
     label: 'EMAIL',

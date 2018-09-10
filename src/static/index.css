@@ -7,3 +7,7 @@ html, body, .grgr {
 body {
     margin: 0;
 }
+
+.has-error .ant-form-extra {
+    color: #f5222d;
+}

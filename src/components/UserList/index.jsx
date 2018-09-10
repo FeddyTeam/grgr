@@ -5,6 +5,7 @@ import { pick } from 'lodash'
 import { Table, Tag, Switch, Button, Form, Input, Modal, Select, Row, Col, message } from 'antd'
 import { AvatarUploader } from '..'
 import userForm from '../../forms/user'
+import bindField from '../../lib/formFieldBindings'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -120,22 +121,22 @@ class UserList extends Component {
                     title="UPDATE USER"
                     visible={this.props.userStore.modalVisible}
                     onOk={this.onSubmit.bind(this)}
-                    onCancel={this.props.userStore.closeModal}
+                    onCancel={e => this.props.userStore.closeModal()}
                 >
                     <Form onSubmit={this.onSubmit.bind(this)}>
-                        <FormItem label={$avatar.label}>
+                        <FormItem {...bindField($avatar)}>
                             <AvatarUploader {...$avatar.bind()}/>
                         </FormItem>
-                        <FormItem label={$email.label}>
+                        <FormItem {...bindField($email)}>
                             <Input {...$email.bind()} autoComplete='email'/>
                         </FormItem>
-                        <FormItem label={$username.label}>
+                        <FormItem {...bindField($username)}>
                             <Input {...$username.bind()} autoComplete='username'/>
                         </FormItem>
-                        <FormItem label={$name.label}>
+                        <FormItem {...bindField($name)}>
                             <Input {...$name.bind()} autoComplete='on'/>
                         </FormItem>
-                        <FormItem label={$status.label}>
+                        <FormItem {...bindField($status)}>
                             <Select {...$status.bind()}>
                                 <Option value='pending'>pending</Option>
                                 <Option value='actived'>actived</Option>
@@ -145,17 +146,17 @@ class UserList extends Component {
                         </FormItem>
                         <Row gutter={10}>
                             <Col span={8}>
-                                <FormItem label={$adm.label}>
+                                <FormItem {...bindField($adm)}>
                                     <Switch checked={$adm.value} onChange={$adm.onChange}/>
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label={$cms.label}>
+                                <FormItem {...bindField($cms)}>
                                     <Switch checked={$cms.value} onChange={$cms.onChange}/>
                                 </FormItem>
                             </Col>
                             <Col span={8}>
-                                <FormItem label={$abc.label}>
+                                <FormItem {...bindField($abc)}>
                                     <Switch checked={$abc.value} onChange={$abc.onChange}/>
                                 </FormItem>
                             </Col>

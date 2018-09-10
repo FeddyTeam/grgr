@@ -1,18 +1,17 @@
-import { action, observable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 import apollo from '../apollo'
 
 import setupLoading from './mixins/setupLoading'
+import setupModal from './mixins/setupModal'
 
+
+@setupModal
 @setupLoading
 class UserStore {
-    @observable users = []
+    @observable storage = new Map()
 
-    @observable modalVisible = false
-    @action.bound openModal() {
-        this.modalVisible = true
-    }
-    @action.bound closeModal() {
-        this.modalVisible = false
+    @computed get users() {
+        return Array.from(this.storage.values())
     }
 
     @action.bound async fetchUsers () {
@@ -21,7 +20,7 @@ class UserStore {
             const results = await apollo.user.fetchUsers()
             const { data: { users } } = results
 
-            this.users = users
+            users.reduce((s, user) => s.set(user.id, user), this.storage)
         } catch (err) {
             throw err.message
         } finally {
@@ -36,12 +35,7 @@ class UserStore {
             const results = await apollo.user.updateUser(userInput)
             const { data: { user } } = results
 
-            const idx = this.users.findIndex(({ id }) => id === user.id)
-            if (idx >= 0) {
-                this.users[idx] = user
-            } else {
-                this.fetchUsers()
-            }
+            this.storage.set(user.id, user)
         } catch (err) {
             throw err.message
         } finally {
@@ -56,7 +50,7 @@ class UserStore {
             const results = await apollo.user.createUser(userInput)
             const { data: { user } } = results
 
-            this.users.push(user)
+            this.storage.set(user.id, user)
         } catch (err) {
             throw err.message
         } finally {
