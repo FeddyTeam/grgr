@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
 import { omit, isEmpty } from 'lodash'
 
-import { AvatarUploader, PhotoUploader } from '..'
+import { PhotoUploader } from '..'
 import { Form, Input, Button, Select, Row, Col, message } from 'antd'
 import newsForm from '../../forms/news'
 import bindField from '../../lib/formFieldBindings'
@@ -10,6 +10,8 @@ import bindField from '../../lib/formFieldBindings'
 const FormItem = Form.Item
 const Option = Select.Option
 const { TextArea } = Input
+
+window.__form = newsForm
 
 @inject('newsStore')
 @observer
@@ -26,14 +28,15 @@ class CMS extends Component {
                 this.props.history.replace(`/cms/edit/${id}`)
             }
 
-            message.success('SUCCESS: 已经自动重定向，可以继续编辑和保存')
+            message.success('SUCCESS: 可以继续编辑和保存')
         } catch (err) {
             message.error(`Somthing Wrong? - ${err}`)
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { id } = this.props.match.params
+
         if (id) {
             // TODO: fetch news from server
             this.props.newsStore.setCurrentId(id)
@@ -45,7 +48,10 @@ class CMS extends Component {
                 return
             }
 
-            newsForm.update(news) // contains a id
+            newsForm.update(omit(news, [
+                'createdAt', 'updatedAt', '__typename', 'user'
+            ]))
+            newsForm.validate()
         } else {
             // TODO: Delete this fake data
             newsForm.update({
@@ -68,7 +74,13 @@ class CMS extends Component {
                 id: null,
                 userId: 'fake-user-id'
             })
+            newsForm.validate()
         }
+    }
+
+    componentWillUnmount() {
+        newsForm.clear()
+        this.props.newsStore.setCurrentId(null)
     }
 
     render() {
@@ -79,21 +91,21 @@ class CMS extends Component {
                 <Form onSubmit={this.onSubmit.bind(this)}>
                     <Row gutter={10}>
                         <Col span={8}>
-                            <FormItem label={newsForm.$('type').label}>
+                            <FormItem {...bindField(newsForm.$('type'))}>
                                 <Select  {...newsForm.$('type').bind()}>
                                     {typeOptions.map(opt => <Option value={opt} key={opt}>{opt}</Option>)}
                                 </Select>
                             </FormItem>
                         </Col>
                         <Col span={8}>
-                            <FormItem label={newsForm.$('level').label}>
+                            <FormItem {...bindField(newsForm.$('level'))}>
                                 <Select  {...newsForm.$('level').bind()}>
                                     {levelOptions.map(opt => <Option value={opt} key={opt}>{opt}</Option>)}
                                 </Select>
                             </FormItem>
                         </Col>
                         <Col span={8}>
-                            <FormItem label={newsForm.$('status').label}>
+                            <FormItem {...bindField(newsForm.$('status'))}>
                                 <Select  {...newsForm.$('status').bind()}>
                                     {statusOptions.map(opt => <Option value={opt} key={opt}>{opt}</Option>)}
                                 </Select>
@@ -104,16 +116,16 @@ class CMS extends Component {
                     <FormItem {...bindField(newsForm.$('title'))}>
                         <Input {...newsForm.$('title').bind()} autoComplete='off'/>
                     </FormItem>
-                    <FormItem label={newsForm.$('altTitle').label}>
+                    <FormItem {...bindField(newsForm.$('altTitle'))}>
                         <Input {...newsForm.$('altTitle').bind()} autoComplete='off'/>
                     </FormItem>
-                    <FormItem label={newsForm.$('content').label}>
+                    <FormItem {...bindField(newsForm.$('content'))}>
                         <TextArea {...newsForm.$('content').bind()} autoComplete='off'/>
                     </FormItem>
 
                     <Row gutter={10}>
                         <Col span={12}>
-                            <FormItem label={newsForm.$('image').label}>
+                            <FormItem {...bindField(newsForm.$('image'))}>
                                 <PhotoUploader imageView='?imageView2/0/w/1200/q/50' {...newsForm.$('image').bind()}/>
                                 <Input style={{ maxWidth: '640px' }} {...newsForm.$('image').bind()} autoComplete='off'/>
                                 <div>
@@ -123,26 +135,26 @@ class CMS extends Component {
                             </FormItem>
                         </Col>
                         <Col span={8}>
-                            <FormItem label={newsForm.$('altImage').label}>
+                            <FormItem {...bindField(newsForm.$('altImage'))}>
                                 <PhotoUploader imageView='?imageView2/1/w/640/h/480' {...newsForm.$('altImage').bind()}/>
                                 <Input {...newsForm.$('altImage').bind()} autoComplete='off'/>
                             </FormItem>
                         </Col>
                         <Col span={4}>
-                            <FormItem label={newsForm.$('thumbnail').label}>
+                            <FormItem {...bindField(newsForm.$('thumbnail'))}>
                                 <PhotoUploader imageView='?imageView2/1/w/256' {...newsForm.$('thumbnail').bind()}/>
                                 <Input {...newsForm.$('thumbnail').bind()} autoComplete='off'/>
                             </FormItem>
                         </Col>
                     </Row>
 
-                    <FormItem label={newsForm.$('link').label}>
+                    <FormItem {...bindField(newsForm.$('link'))}>
                         <Input {...newsForm.$('link').bind()} autoComplete='off'/>
                     </FormItem>
 
                     <Row>
                         <Col span={8}>
-                            <FormItem label={newsForm.$('color').label}>
+                            <FormItem {...bindField(newsForm.$('color'))}>
                                 <Input {...newsForm.$('color').bind()} autoComplete='off'/>
                             </FormItem>
                         </Col>
