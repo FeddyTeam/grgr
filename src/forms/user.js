@@ -18,8 +18,7 @@ const fields = [{
 }, {
     name: 'name',
     label: 'NAME',
-    type: 'name',
-    rules: 'required|string|between:6,24'
+    type: 'name'
 }, {
     name: 'status',
     label: 'STATUS'

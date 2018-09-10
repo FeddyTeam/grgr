@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { omit } from 'lodash'
 import { Form, Input, Button, message } from 'antd'
 import passwordsForm from '../../forms/passwords'
+import bindField from '../../lib/formFieldBindings'
 
 const FormItem = Form.Item
 
@@ -31,13 +32,13 @@ class Login extends Component {
         return (
             <div>
                 <Form onSubmit={this.onSubmit.bind(this)}>
-                    <FormItem label={$password.label}>
+                    <FormItem {...bindField($password)}>
                         <Input {...$password.bind()} autoComplete='current-password'/>
                     </FormItem>
-                    <FormItem label={$newPass.label}>
+                    <FormItem {...bindField($newPass)}>
                         <Input {...$newPass.bind()} autoComplete='new-password'/>
                     </FormItem>
-                    <FormItem label={$newPass2.label}>
+                    <FormItem {...bindField($newPass2)}>
                         <Input {...$newPass2.bind()} autoComplete='new-password'/>
                     </FormItem>
                     <FormItem>

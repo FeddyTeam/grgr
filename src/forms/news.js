@@ -16,7 +16,8 @@ const fields = [{
 }, {
     name: 'title',
     label: 'TITLE',
-    type: 'text'
+    type: 'text',
+    rules: 'required|string|between:3,128'
 }, {
     name: 'altTitle',
     label: 'ALT TITLE',

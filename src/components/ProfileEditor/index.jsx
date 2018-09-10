@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { omit } from 'lodash'
 import { Link } from 'react-router-dom'
 import profileForm from '../../forms/profile-edit'
+import bindField from '../../lib/formFieldBindings'
 import { Form, Input, Button, message } from 'antd'
 import { AvatarUploader } from '..'
 
@@ -42,29 +43,29 @@ class ProfileEditor extends Component {
         return (
             <div>
                 <Form onSubmit={this.onSubmit.bind(this)}>
-                    <FormItem label={$avatar.label}>
+                    <FormItem {...bindField($avatar)}>
                         <AvatarUploader {...$avatar.bind()} autoComplete='avatar'/>
                     </FormItem>
 
-                    {/* <FormItem label={$email.label}>
+                    {/* <FormItem {...bindField($email)}>
                         <Input {...$email.bind()} autoComplete='email'/>
                     </FormItem>
-                    <FormItem label={$username.label}>
+                    <FormItem {...bindField($username)}>
                         <Input {...$username.bind()} autoComplete='off'/>
                     </FormItem> */}
 
-                    <FormItem label={$name.label}>
+                    <FormItem {...bindField($name)}>
                         <Input {...$name.bind()} autoComplete='fullname'/>
                     </FormItem>
-                    <FormItem label={$bio.label}>
+                    <FormItem {...bindField($bio)}>
                         <Input {...$bio.bind()} autoComplete='bio'/>
                     </FormItem>
-                    <FormItem label={$url.label}>
+                    <FormItem {...bindField($url)}>
                         <Input {...$url.bind()} autoComplete='url'/>
                     </FormItem>
 
-                    <FormItem label={$birthday.label}>
-                        <Input {...$birthday.bind()} autoComplete='birthday'/>
+                    <FormItem {...bindField($birthday)}>
+                        <Input {...$birthday.bind()} autoComplete='birthday' disabled/>
                     </FormItem>
 
                     <FormItem>

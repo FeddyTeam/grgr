@@ -5,6 +5,7 @@ import { omit, isEmpty } from 'lodash'
 import { AvatarUploader, PhotoUploader } from '..'
 import { Form, Input, Button, Select, Row, Col, message } from 'antd'
 import newsForm from '../../forms/news'
+import bindField from '../../lib/formFieldBindings'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -16,8 +17,8 @@ class CMS extends Component {
 
     async onSubmit(e) {
         e.preventDefault()
+        if (newsForm.hasError) return
         try {
-            // means: editing
             if (this.props.newsStore.currentId) {
                 await this.props.newsStore.updateNews(newsForm.values())
             } else {
@@ -100,7 +101,7 @@ class CMS extends Component {
                         </Col>
                     </Row>
 
-                    <FormItem label={newsForm.$('title').label}>
+                    <FormItem {...bindField(newsForm.$('title'))}>
                         <Input {...newsForm.$('title').bind()} autoComplete='off'/>
                     </FormItem>
                     <FormItem label={newsForm.$('altTitle').label}>
