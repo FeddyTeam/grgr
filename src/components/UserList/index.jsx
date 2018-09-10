@@ -120,7 +120,7 @@ class UserList extends Component {
                     title="UPDATE USER"
                     visible={this.props.userStore.modalVisible}
                     onOk={this.onSubmit.bind(this)}
-                    onCancel={this.props.userStore.closeModal}
+                    onCancel={e => this.props.userStore.closeModal()}
                 >
                     <Form onSubmit={this.onSubmit.bind(this)}>
                         <FormItem label={$avatar.label}>

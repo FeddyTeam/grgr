@@ -1,17 +1,13 @@
-import { decorate, observable, action } from 'mobx'
+import { observable, action } from 'mobx'
 
 export default function(target) {
-    target.prototype.loading = false
-    target.prototype.startProgress = function() {
-        this.loading = true
+    return class extends target {
+        @observable loading = false
+        @action startProgress() {
+            this.loading = true
+        }
+        @action stopProgress() {
+            this.loading = false
+        }
     }
-    target.prototype.stopProgress = function() {
-        this.loading = false
-    }
-
-    decorate(target, {
-        loading: observable,
-        startProgress: action,
-        stopProgress: action
-    })
 }

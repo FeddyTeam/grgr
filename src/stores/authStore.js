@@ -54,7 +54,6 @@ class AuthStore {
             }
         } catch (err) {
             this.removeToken()
-            throw new Error(err.message)
         }
     }
 

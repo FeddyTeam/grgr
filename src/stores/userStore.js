@@ -2,18 +2,13 @@ import { action, observable } from 'mobx'
 import apollo from '../apollo'
 
 import setupLoading from './mixins/setupLoading'
+import setupModal from './mixins/setupModal'
 
+
+@setupModal
 @setupLoading
 class UserStore {
     @observable users = []
-
-    @observable modalVisible = false
-    @action.bound openModal() {
-        this.modalVisible = true
-    }
-    @action.bound closeModal() {
-        this.modalVisible = false
-    }
 
     @action.bound async fetchUsers () {
         try {
