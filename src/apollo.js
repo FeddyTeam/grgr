@@ -3,7 +3,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-import { LOGIN, UPDATE_PASSWORD, FETCH_PROFILE } from './graphql/auth'
+import { LOGIN, UPDATE_PASSWORD, FETCH_PROFILE, UPDATE_PROFILE } from './graphql/auth'
 import { FETCH_NEWS, CREATE_NEWS, UPDATE_NEWS, DELETE_NEWS, PERMANENTLY_DELETE_NEWS } from './graphql/news'
 import { CREATE_USER, UPDATE_USER, FETCH_USERS, FETCH_USER } from './graphql/user'
 
@@ -47,6 +47,12 @@ export const auth = {
     fetchProfile() {
         return client.query({
             query: FETCH_PROFILE
+        })
+    },
+    updateProfile(profile) {
+        return client.mutate({
+            mutation: UPDATE_PROFILE,
+            variables: { profile }
         })
     }
 }

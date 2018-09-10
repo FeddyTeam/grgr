@@ -2,7 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { Layout } from 'antd'
-import { Login, Hello, CMS, Manage, Profile, Passwords, Exit, AvatarUploader } from '..'
+import { Login, Hello, CMS, Manage, Profile, Passwords, Exit, ProfileEditor } from '..'
 
 const { Content } = Layout
 
@@ -23,7 +23,8 @@ class AppContent extends React.Component {
                 <Route path="/login" component={Login}/>
                 {keys.cms && <Route path="/cms" component={CMS}/>}
                 {keys.adm && <Route path="/manage" component={Manage}/>}
-                {keys.lgd && <Route path="/profile" component={Profile}/>}
+                {keys.lgd && <Route exact path="/profile" component={Profile}/>}
+                {keys.lgd && <Route path="/profile/edit" component={ProfileEditor}/>}
                 {keys.lgd && <Route path="/passwords" component={Passwords}/>}
                 {keys.lgd && <Route path="/exit" component={Exit}/>}
             </Content>

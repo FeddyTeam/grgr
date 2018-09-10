@@ -100,6 +100,19 @@ class AuthStore {
             this.stopProgress()
         }
     }
+
+    @action.bound async updateProfile(values) {
+        try {
+            this.startProgress()
+            const results = await apollo.auth.updateProfile(values)
+            const { data: { profile } } = results
+            this.setProfile(profile)
+        } catch (err) {
+            throw err.message
+        } finally {
+            this.stopProgress()
+        }
+    }
 }
 
 export default new AuthStore()

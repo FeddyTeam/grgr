@@ -13,6 +13,7 @@ class Profile extends Component {
         return (
             <div>
                 <Link to="/passwords">CHANGE PASSWORD</Link>
+                <Link to="/profile/edit">EDIT PROFILE</Link>
                 <Card
                     title={profile.name}
                     cover={<img src={profile.avatar} alt="Avatar"/>}
