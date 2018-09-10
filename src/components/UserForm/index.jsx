@@ -20,7 +20,6 @@ class UserCreator extends Component {
             this.props.history.replace('/manage/users/all')
 
             message.success('SUCCESS')
-            message.warning('确实成功了，不过因为 Apollo-client 的缓存机制，列表没更新。已安排', 5000)
             userForm.clear()
         } catch (err) {
             message.error(`Somthing Wrong? - ${err}`)
