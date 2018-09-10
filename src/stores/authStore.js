@@ -16,6 +16,7 @@ class AuthStore {
     }
     @observable token = ''
     @observable info = {}
+    @observable uptoken = ''
 
     @computed({ keepAlive: true }) get keys() {
         return this.info.keys || {}
@@ -106,6 +107,21 @@ class AuthStore {
             const results = await apollo.auth.updateProfile(values)
             const { data: { profile } } = results
             this.setProfile(profile)
+        } catch (err) {
+            throw err.message
+        } finally {
+            this.stopProgress()
+        }
+    }
+
+    @action async mkQiniuToken() {
+        try {
+            this.startProgress()
+            const results = await apollo.utils.mkQiniuToken()
+            const { data: { token } } = results
+
+            this.uptoken = token
+            return token
         } catch (err) {
             throw err.message
         } finally {

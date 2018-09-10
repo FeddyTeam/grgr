@@ -1,10 +1,10 @@
 import { UploaderBuilder } from 'qiniu4js'
+import authStore from '../stores/authStore'
 
 export default function(options) {
     const opts = {
         multiple: false,
         accept: ['.png', '.jpg', '.jpeg', '.gif'],
-        tokenUrl: '/k/qiniu',
         domains: {
             'https': 'https://upload-z2.qiniup.com',
             'http': 'http://upload-z2.qiniup.com'
@@ -16,30 +16,23 @@ export default function(options) {
         onTaskFail () {},
         onReady () {},
         onStart () {},
-        jwtToken: '',
         ...options
     }
 
     const {
         multiple, accept,
-        domains, tokenUrl,
+        domains,
         host, imageView,
-        onTaskProgress, onTaskFail, onTaskSuccess, onReady, onStart,
-        jwtToken
+        onTaskProgress, onTaskFail, onTaskSuccess, onReady, onStart
     } = opts
-
-    const authorization = `Bearer ${jwtToken}`
-    const headers = new Headers()
-    headers.append('Authorization', authorization)
 
     const uploader = new UploaderBuilder()
         .domain(domains)
         .multiple(multiple)
         .accept(accept)
         .tokenFunc(async (setToken, task) => {
-            const res = await fetch(tokenUrl, { headers })
-            const json = await res.json()
-            setToken(json.uptoken)
+            const uptoken = await authStore.mkQiniuToken()
+            setToken(uptoken)
         })
         .listener({
             onTaskSuccess(task) {

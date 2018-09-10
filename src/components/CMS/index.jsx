@@ -3,8 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { Route, Link } from 'react-router-dom'
 
 import { Menu, Icon } from 'antd'
-import NewsList from '../NewsList'
-import NewsEditor from '../NewsEditor'
+import { NewsList, NewsEditor, RecentPosts } from '..'
 
 @inject('newsStore')
 @observer
@@ -28,11 +27,17 @@ class CMS extends Component {
                             <Icon type="edit" /> CREATE NEWS
                         </Link>
                     </Menu.Item>
+                    <Menu.Item key="/cms/recent-posts">
+                        <Link to="/cms/recent-posts">
+                            <Icon type="copy" /> RECENT POSTS
+                        </Link>
+                    </Menu.Item>
                 </Menu>
 
                 <Route path="/cms" exact component={NewsList} />
                 <Route path="/cms/edit" exact component={NewsEditor} />
                 <Route path="/cms/edit/:id" component={NewsEditor} props={{ editing: true }}/>
+                <Route path="/cms/recent-posts" component={RecentPosts}/>
 
             </div>
         )

@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { inject } from 'mobx-react'
 import { Icon, message } from 'antd'
 import qiniu from '../../lib/qiniu'
 
 import './style.css'
 
-@inject('authStore')
 class AvatarUploader extends Component {
     constructor(props) {
         super(props)
@@ -60,7 +58,6 @@ class AvatarUploader extends Component {
     uploadImage() {
         const onChange = typeof this.props.onChange === 'function' ? this.props.onChange : () => {}
         const uploader = qiniu({
-            jwtToken: this.props.authStore.token,
             multiple: true,
             imageView: '?imageView2/1/w/256',
             onStart: tasks => {

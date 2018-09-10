@@ -83,6 +83,20 @@ class AuthStore {
         }
     }
 
+    @action async checkRSS() {
+        try {
+            this.startProgress()
+            const results = await apollo.utils.checkRSS()
+            const { data: { count } } = results
+
+            return count
+        } catch (err) {
+            throw err.message
+        } finally {
+            this.stopProgress()
+        }
+    }
+
     @computed get items() {
         const results = []
         this.storage.forEach(one => {
